@@ -53,7 +53,6 @@ def check_file_extension(file_extension: str):
 def main(argv=None):
     try:
         check_system()
-
         parser = argparse.ArgumentParser()
         parser.add_argument("asm_file_name")
         args = parser.parse_args(argv)
@@ -65,7 +64,8 @@ def main(argv=None):
         check_file_extension(file_extension=file_extension)
         output = subprocess.getoutput("nasm -f elf64 " + file_name)
         if len(output) > 0:
-            error(error_message="An error occured with nasm: " + output)
+            error_message = "An error occured with nasm: " + output
+            raise SyntaxError(error_message)
         output = subprocess.getoutput("objdump -d " + file_base_name + ".o")
         print(output)
         print()
