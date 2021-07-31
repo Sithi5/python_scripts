@@ -18,7 +18,7 @@ def error(error_message: str = None):
 def convert_line_to_shellcode(line: str) -> str:
     shell_code = []
     while len(line) > 1:
-        if line[0] == " ":
+        if line[0] == " " and line[1] != " ":
             line = line[1:]
         elif line[0] in HEXA_CHAR and line[1] in HEXA_CHAR:
             shell_code.append("\\x" + line[0] + line[1])
