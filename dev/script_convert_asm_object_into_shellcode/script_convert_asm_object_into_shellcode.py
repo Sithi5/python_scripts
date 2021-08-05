@@ -3,6 +3,7 @@ import subprocess
 import platform
 import pathlib
 import re
+import sys
 
 ACCEPTED_SYSTEM = ["Linux"]
 ACCEPTED_ARCHITECTURE = ["64bit"]
@@ -51,6 +52,9 @@ def check_file_extension(file_extension: str):
 
 
 def main(argv=None):
+    if sys.version_info < (3, 7):
+        print("Please upgrade your Python version to 3.7.0 or higher")
+        exit()
     try:
         check_system()
         parser = argparse.ArgumentParser()
