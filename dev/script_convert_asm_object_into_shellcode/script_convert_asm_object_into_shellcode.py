@@ -83,6 +83,7 @@ def main(argv=None):
         shell_code_len = len(shell_code_inline)
         print("shell_code : \n", shell_code_inline)
         print("\nshell_code_len : \n", shell_code_len / 4)
+        subprocess.getoutput("rm " + file_base_name + ".o")
     except SyntaxError as e:
         print("An error occured : ", str(e.msg))
 
