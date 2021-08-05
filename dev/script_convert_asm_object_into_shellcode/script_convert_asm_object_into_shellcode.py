@@ -61,18 +61,24 @@ def main(argv=None):
         parser.add_argument("asm_file_name")
         args = parser.parse_args(argv)
         file_name = args.asm_file_name
+        print("file name : ", file_name)
         file_extension = pathlib.Path(file_name).suffix
         file_base_name = file_name[: -len(file_extension)]
         # Removing the dot for file_extension.
         file_extension = file_extension[1:]
         check_file_extension(file_extension=file_extension)
+
+        print("> nasm -f elf64 " + file_name)
         output = subprocess.getoutput("nasm -f elf64 " + file_name)
         if len(output) > 0:
             error_message = "An error occured with nasm: " + output
             raise SyntaxError(error_message)
+
+        print("> objdump -d " + file_base_name + ".o")
         output = subprocess.getoutput("objdump -d " + file_base_name + ".o")
         print(output)
         print()
+
         output = output.split("\n")
         shell_code = []
         pattern_match_code_line = r"[\da-f]+:"
@@ -87,6 +93,10 @@ def main(argv=None):
         shell_code_len = len(shell_code_inline)
         print("shell_code : \n", shell_code_inline)
         print("\nshell_code_len : \n", shell_code_len / 4)
+        output = subprocess.getoutput(
+            "echo " + "'" + shell_code_inline + "'" + ">" + file_base_name + "_shellcode"
+        )
+        print("> rm " + file_base_name + ".o")
         subprocess.getoutput("rm " + file_base_name + ".o")
     except SyntaxError as e:
         print("An error occured : ", str(e.msg))
